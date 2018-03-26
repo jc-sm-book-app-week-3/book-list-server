@@ -1,0 +1,30 @@
+{
+  "name": "book-list-server",
+  "version": "1.0.0",
+  "description": "book app",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "pg": "^7.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jc-sm-book-app-week-3/book-list-server.git"
+  },
+  "keywords": [
+    "book",
+    "codefellows"
+  ],
+  "author": "sean & joanna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jc-sm-book-app-week-3/book-list-server/issues"
+  },
+  "homepage": "https://github.com/jc-sm-book-app-week-3/book-list-server#readme"
+}
