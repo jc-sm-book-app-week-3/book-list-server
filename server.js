@@ -20,7 +20,11 @@ client.on('error', err => console.error(err));
 //API Endpoints
 
 // app.get('/new', (request, response) => {};
-app.get('/api/v1/books', (req,res)=> res.send('It lives'));
+app.get('/api/v1/books', (req,res)=>{
+    client.query(`SELECT book_id, title, author, img_url, isbn FROM books;`)
+    .then(results=>res.send(results.rows))
+    .catch(console.error)});
+//Step 9
 //This will need more once the Database is opperational
 app.get('*',(req,res)=> res.redirect(CLIENT_URL));
 // app.post('/api/v1/books', (request, response) => {
