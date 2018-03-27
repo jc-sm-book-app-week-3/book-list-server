@@ -16,20 +16,20 @@ const CLIENT_URL = process.env.CLIENT_URL;
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
 client.on('error', err => console.error(err));
-
+app.use(cors());
 //API Endpoints
 
 // app.get('/new', (request, response) => {};
 app.get('/api/v1/books', (req,res)=>{
-    client.query(`SELECT book_id, title, author, img_url, isbn FROM books;`)
+  client.query(`SELECT book_id, title, author, img_url, isbn FROM books;`)
     .then(results=>res.send(results.rows))
-    .catch(console.error)});
+    .catch(console.error);});
 //Step 9
 //This will need more once the Database is opperational
 app.get('*',(req,res)=> res.redirect(CLIENT_URL));
 // app.post('/api/v1/books', (request, response) => {
-    client.query(``,[],function(err) {if (err) console.error(err);
-    }
+client.query(``,[],function(err) {if (err) console.error(err);
+}
 );
 // app.put('/api/v1/books/:id', function(request, response) {client.query(``,[])
 //     .then(() => {client.query(``,[])})
@@ -37,24 +37,24 @@ app.get('*',(req,res)=> res.redirect(CLIENT_URL));
 //     .catch(err => {console.error(err);})
 // });
 app.delete('/api/v1/books/:id', (request, response) => {
-    client.query(
-        `DELETE FROM books WHERE book_id=$1;`,
-        [request.params.id]
-    )
+  client.query(
+    `DELETE FROM books WHERE book_id=$1;`,
+    [request.params.id]
+  )
     .then(() => {
-        response.send('Delete complete');
+      response.send('Delete complete');
     })
     .catch(err => {
-        console.error(err)
+      console.error(err);
     });
 });
 app.delete('/api/v1/books', (request, response) => {
-    client.query('DELETE FROM books')
+  client.query('DELETE FROM books')
     .then(() => {
-        response.send('Delete complete');
+      response.send('Delete complete');
     })
     .catch(err => {
-        console.error(err)
+      console.error(err);
     });
 });
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
