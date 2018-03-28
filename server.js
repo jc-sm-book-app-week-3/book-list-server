@@ -21,41 +21,44 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //API Endpoints
 
-// app.get('/new', (request, response) => {};
-app.get('/api/v1/books', (req,res)=>{
+app.get('/api/v1/books', (request, response)=>{
   client.query(`SELECT book_id, title, author, img_url, isbn FROM books;`)
-  .then(results=>res.send(results.rows))
-  .catch(console.error);});
+    .then(results=>response.send(results.rows))
+    .catch(console.error);
+});
+
 app.get('*',(req,res)=> res.redirect(CLIENT_URL));
-app.get('/api/v1/books/:id',(req,res)=>{
-  client.query(`SELECT FROM books WHERE book_id =$1`),
+app.get('/api/v1/books/:id',(request,response)=>{
+  client.query(`SELECT * FROM books WHERE book_id =$1`),
   [request.params.id]
-})
+    .then(() => {response.send('Update complete');});
+});
 app.post('/api/v1/books', (request, response) => {
   console.log(request.body);
-client.query(`INSERT INTO books(title, author, img_url, isbn, description) VALUES ($1,$2,$3,$4,$5);`,
-[
-  request.body.title,
-  request.body.author,
-  request.body.img_url,
-  request.body.isbn,
-  request.body.description
+  client.query(`INSERT INTO books(title, author, img_url, isbn, description) VALUES ($1,$2,$3,$4,$5);`,
+    [
+      request.body.title,
+      request.body.author,
+      request.body.img_url,
+      request.body.isbn,
+      request.body.description
 
-]//,function(err) {if (err) console.error(err);
-);});
+    ]
+      .then(() => {response.send('Update complete');})
+  );});
 app.put('/api/v1/books/:id', function(request, response) {
   client.query(`UPDATE books SET title=$1, author=$2, img_url=$3, isbn=$4, description=$5
   WHERE book_id=$6;`,
   [
-  request.body.title,
-  request.body.author,
-  request.body.img_url,
-  request.body.isbn,
-  request.body.description,
-  request.params.id
+    request.body.title,
+    request.body.author,
+    request.body.img_url,
+    request.body.isbn,
+    request.body.description,
+    request.params.id
   ])
     .then(() => {response.send('Update complete');})
-    .catch(err => {console.error(err);})
+    .catch(err => {console.error(err);});
 });
 app.delete('/api/v1/books/:id', (request, response) => {
   client.query(
