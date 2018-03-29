@@ -11,6 +11,7 @@ const app = express();
 //We will stash settings in process.env
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
+const API_URL = 'http://localhost:3000';
 
 //database setup
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -21,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //API Endpoints
 
-app.get('/api/v1/books', (request, response)=>{
+app.get(`/api/v1/books`, (request, response)=>{
   client.query(`SELECT book_id, title, author, img_url, isbn FROM books;`)
     .then(results=>response.send(results.rows))
     .catch(console.error);
@@ -29,9 +30,9 @@ app.get('/api/v1/books', (request, response)=>{
 
 //app.get('*',(req,res)=> res.redirect(CLIENT_URL));
 app.get('/api/v1/books/:id',(request,response)=>{
-  client.query(`SELECT * FROM books WHERE book_id =$1`,
-  [request.params.book_id])
-    .then(() => {response.send('Update complete');});
+  client.query(`SELECT * FROM books WHERE book_id =$1;`,
+  [request.params.id])
+    .then(results => response.send(results.rows));
 });
 app.post('/api/v1/books', (request, response) => {
   console.log(request.body);
@@ -43,7 +44,7 @@ app.post('/api/v1/books', (request, response) => {
       request.body.isbn,
       request.body.description
     ])
-      .then(() => {response.send('Update complete');});
+      .then(() => {response.send('Update complete 2');});
     });
 app.put('/api/v1/books/:id', function(request, response) {
   client.query(`UPDATE books SET title=$1, author=$2, img_url=$3, isbn=$4, description=$5
@@ -56,13 +57,14 @@ app.put('/api/v1/books/:id', function(request, response) {
     request.body.description,
     request.params.book_id
   ])
-    .then(() => {response.send('Update complete');})
+    .then(() => {response.send('Update complete 3');})
     .catch(err => {console.error(err);});
 });
 app.delete('/api/v1/books/:id', (request, response) => {
   client.query(
     `DELETE FROM books WHERE book_id=$1;`,
-    [request.params.book_id])
+    [request.params.book_id]
+)
     .then(() => {
       response.send('Delete complete');
     })
