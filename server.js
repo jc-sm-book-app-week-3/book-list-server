@@ -27,8 +27,8 @@ app.get('/api/v1/books', (request, response)=>{
     .catch(console.error);
 });
 
-//app.get('*',(req,res)=> res.redirect(CLIENT_URL));
 app.get('/api/v1/books/:book_id',(request,response)=>{
+  console.log(request.params.book_id);
   client.query(`SELECT * FROM books WHERE book_id =$1;`,
     [request.params.book_id])
     .then(results => response.send(results.rows));
@@ -79,4 +79,5 @@ app.delete('/api/v1/books', (request, response) => {
       console.error(err);
     });
 });
+app.get('*',(req,res)=> res.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
