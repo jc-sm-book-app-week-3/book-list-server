@@ -27,10 +27,10 @@ app.get('/api/v1/books', (request, response)=>{
     .catch(console.error);
 });
 
-app.get('*',(req,res)=> res.redirect(CLIENT_URL));
+//app.get('*',(req,res)=> res.redirect(CLIENT_URL));
 app.get('/api/v1/books/:id',(request,response)=>{
-  client.query(`SELECT * FROM books WHERE book_id =$1`),
-  [request.params.id]
+  client.query(`SELECT * FROM books WHERE book_id =$1`,
+  [request.params.book_id])
     .then(() => {response.send('Update complete');});
 });
 app.post('/api/v1/books', (request, response) => {
@@ -42,10 +42,9 @@ app.post('/api/v1/books', (request, response) => {
       request.body.img_url,
       request.body.isbn,
       request.body.description
-
-    ]
-      .then(() => {response.send('Update complete');})
-  );});
+    ])
+      .then(() => {response.send('Update complete');});
+    });
 app.put('/api/v1/books/:id', function(request, response) {
   client.query(`UPDATE books SET title=$1, author=$2, img_url=$3, isbn=$4, description=$5
   WHERE book_id=$6;`,
@@ -55,7 +54,7 @@ app.put('/api/v1/books/:id', function(request, response) {
     request.body.img_url,
     request.body.isbn,
     request.body.description,
-    request.params.id
+    request.params.book_id
   ])
     .then(() => {response.send('Update complete');})
     .catch(err => {console.error(err);});
@@ -63,8 +62,7 @@ app.put('/api/v1/books/:id', function(request, response) {
 app.delete('/api/v1/books/:id', (request, response) => {
   client.query(
     `DELETE FROM books WHERE book_id=$1;`,
-    [request.params.id]
-  )
+    [request.params.book_id])
     .then(() => {
       response.send('Delete complete');
     })
